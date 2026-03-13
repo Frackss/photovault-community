@@ -4,4 +4,4 @@ compatibility_date = "2024-01-01"
 
 [[kv_namespaces]]
 binding = "PHOTO_VAULT"
-id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+id = "5adfa59519c24e1d8108fa46ea255ea3"
