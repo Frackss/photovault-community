@@ -1,5 +1,5 @@
 // ── CONFIG — replace with your deployed Cloudflare Worker URL ──
-const WORKER_URL = 'https://photo-vault-worker.YOUR_SUBDOMAIN.workers.dev';
+const WORKER_URL = 'https://photovault-community.wesleyfairfax.workers.dev';
 
 const MAX = 4;
 let stream, shots = [], currentFilter = 'none', shotCount = 0, busy = false;
