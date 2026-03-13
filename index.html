@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>photo vault</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <span class="logo" onclick="showPage('landing')">photo vault</span>
+  <ul>
+    <li><a onclick="showPage('landing')" id="nav-home" class="active">home</a></li>
+    <li><a onclick="showPage('booth')" id="nav-booth">booth</a></li>
+    <li><a onclick="showPage('about')" id="nav-about">about</a></li>
+  </ul>
+</nav>
+
+<!-- LANDING -->
+<div id="landing" class="page active">
+  <div class="hero">
+    <h1 class="hero-logo">photo vault</h1>
+    <p class="hero-tagline">Turn your favorite moments into beautiful, handcrafted photo strips — just like the ones you'd pull from an old booth by the boardwalk.</p>
+    <button class="btn" onclick="showPage('booth')">Open the booth</button>
+  </div>
+
+  <div class="wall-section">
+    <div class="wall-header">
+      <div>
+        <div class="wall-title">from the vault</div>
+        <div class="wall-sub">strips shared by the community · disappear after 30 days</div>
+      </div>
+    </div>
+    <div class="wall-grid" id="wallGrid">
+      <div class="wall-loading">developing film...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="page">
+  <div class="about-inner">
+    <div class="about-content">
+      <span class="section-label">about</span>
+      <h2 class="about-heading">built to capture memories with friends.</h2>
+      <div class="about-divider"></div>
+      <p class="about-body">photo vault started with a simple idea — that the best moments deserve to feel tangible. Not just another photo in a camera roll, but something you'd want to hold onto.</p>
+      <p class="about-body">open to the world. step inside.</p>
+      <div style="margin-top:48px;"><button class="btn" onclick="showPage('booth')">open the booth</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOOTH -->
+<div id="booth" class="page">
+  <div class="booth-inner">
+    <div class="booth-header">
+      <h2>step inside</h2>
+      <p>four shots. one strip. all yours.</p>
+    </div>
+    <div class="booth-layout">
+
+      <!-- Camera + controls -->
+      <div>
+        <div class="camera-wrap">
+          <video id="video" autoplay playsinline muted></video>
+          <div class="flash" id="flash"></div>
+        </div>
+        <div class="controls">
+          <div class="ctrl-section">
+            <label>filter</label>
+            <div class="filter-btns">
+              <button class="filter-btn active" onclick="setFilter('none',this)">color</button>
+              <button class="filter-btn" onclick="setFilter('grayscale',this)">b&w</button>
+              <button class="filter-btn" onclick="setFilter('sepia',this)">sepia</button>
+            </div>
+          </div>
+          <div class="ctrl-section">
+            <label>caption</label>
+            <input class="caption-input" id="caption" placeholder="add a caption..." maxlength="30" oninput="updateStripMeta()">
+          </div>
+          <div class="ctrl-section">
+            <div class="date-toggle">
+              <input type="checkbox" id="dateToggle" checked onchange="updateStripMeta()">
+              <span>stamp the date</span>
+            </div>
+          </div>
+          <div class="ctrl-section">
+            <label>shots taken</label>
+            <div class="shot-dots">
+              <div class="dot" id="dot0"></div>
+              <div class="dot" id="dot1"></div>
+              <div class="dot" id="dot2"></div>
+              <div class="dot" id="dot3"></div>
+            </div>
+          </div>
+          <button class="btn shoot-btn" id="shootBtn" onclick="startCountdown()">📸 take a shot</button>
+        </div>
+      </div>
+
+      <!-- Strip panel -->
+      <div class="strip-panel">
+        <div class="strip-panel-label">your strip</div>
+        <div class="printer-wrap"><div class="printer-slot"></div></div>
+        <div class="strip-outer" id="stripOuter">
+          <div class="strip-preview" id="stripPreview">
+            <div class="strip-frame-slot" id="slot0"><span class="empty-icon">○</span></div>
+            <div class="strip-frame-slot" id="slot1"><span class="empty-icon">○</span></div>
+            <div class="strip-frame-slot" id="slot2"><span class="empty-icon">○</span></div>
+            <div class="strip-frame-slot" id="slot3"><span class="empty-icon">○</span></div>
+            <div class="strip-caption" id="stripCaption"></div>
+            <div class="strip-date" id="stripDate"></div>
+          </div>
+        </div>
+        <div class="strip-actions">
+          <button class="btn download-btn" id="downloadBtn" onclick="downloadStrip()">↓ save strip</button>
+          <button class="btn" id="downloadPrintBtn" onclick="downloadPrint()">✂ print 4×6</button>
+          <button class="btn share-btn" id="shareBtn" onclick="openShareModal()">✦ share to vault</button>
+          <button class="btn outline retake-btn" id="retakeBtn" onclick="resetBooth()">↺ retake</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SHARE MODAL -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal">
+    <h3>share to the vault?</h3>
+    <p>Your strip will appear on the home page for everyone to see. It'll disappear after 30 days.</p>
+    <div class="modal-preview"><img id="modalPreviewImg" src="" alt="your strip"></div>
+    <div class="modal-actions">
+      <button class="btn" id="confirmShareBtn" onclick="confirmShare()">yes, share it</button>
+      <button class="btn outline" onclick="closeShareModal()">keep it private</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close">×</span>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- COUNTDOWN -->
+<div id="countdown-display"></div>
+
+<!-- Hidden canvas for downloads -->
+<canvas id="offscreen" style="display:none;"></canvas>
+
+<script src="script.js"></script>
+</body>
+</html>
